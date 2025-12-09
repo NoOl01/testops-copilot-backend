@@ -5,10 +5,10 @@ Built in Go with Gin, it provides a REST API, handles long-running requests safe
 
 ## Tech Stack
 
-Backend: Go 1.24, Gin
-LLM Integration: Cloud.ru Foundation Models
-Logging: Custom logger `golog`
-Deployment: Docker, env configuration
+- Backend: Go 1.24, Gin
+- LLM Integration: Cloud.ru Foundation Models
+- Logging: Custom logger `golog`
+- Deployment: Docker, env configuration
 
 ## Getting Started
 

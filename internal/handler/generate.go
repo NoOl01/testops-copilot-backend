@@ -11,6 +11,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Generate
+// @Summary Generate test case using LLM
+// @Description Generates a test case based on the user prompt. The request will be processed by the LLM and returned in a unified response format.
+// @Tags Generate
+// @Accept json
+// @Produce json
+// @Param body body dto.GenerateBody true "Request body containing test cases"
+// @Success 200 {object} dto.GenerateResult "Successful response with generated test case"
+// @Failure 400 {object} dto.ErrorResult "Invalid request body"
+// @Failure 500 {object} dto.ErrorResult "Internal server error or LLM request failed"
+// @Router /api/v1/generate [post]
 func (h *handler) Generate(ctx *gin.Context) {
 	timeoutCtx, cancel := context.WithTimeout(ctx.Request.Context(), 120*time.Second)
 	defer cancel()

@@ -20,6 +20,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @title TestOps Copilot
+// @version 0.1.0
+// @BasePath /api/v1
 func main() {
 	config.EnvLoad()
 	logger.InitLogger()
@@ -29,6 +32,10 @@ func main() {
 
 	srv := service.NewService()
 	h := handler.NewHandler(srv)
+
+	if !config.Env.Debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	r := gin.Default()
 

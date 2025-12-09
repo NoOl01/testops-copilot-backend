@@ -6,6 +6,7 @@ type GenerateBody struct {
 
 type Case struct {
 	UserPrompt     string         `json:"user_prompt"`
+	TestType       TestType       `json:"test_type"`
 	AllureMetadata AllureMetadata `json:"allure_metadata"`
 }
 
@@ -17,3 +18,10 @@ type AllureMetadata struct {
 	Tag     []string `json:"tag"`
 	Title   string   `json:"title"`
 }
+
+type TestType string
+
+const (
+	UiTest  TestType = "UiTest"
+	ApiTest TestType = "ApiTest"
+)

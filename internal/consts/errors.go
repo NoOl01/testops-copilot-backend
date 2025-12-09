@@ -10,4 +10,5 @@ var (
 	GenerateInvalidBody = errors.New("invalid request body")
 	ConnectionTimeout   = errors.New("connection timeout")
 	RequestCanceled     = errors.New("request canceled")
+	InvalidTestType     = errors.New("invalid test type")
 )

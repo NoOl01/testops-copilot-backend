@@ -1,0 +1,88 @@
+basePath: /api/v1
+definitions:
+  dto.AllureMetadata:
+    properties:
+      feature:
+        type: string
+      label:
+        type: string
+      manual:
+        type: boolean
+      story:
+        type: string
+      tag:
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+    type: object
+  dto.Case:
+    properties:
+      allure_metadata:
+        $ref: '#/definitions/dto.AllureMetadata'
+      user_prompt:
+        type: string
+    type: object
+  dto.ErrorResult:
+    properties:
+      error:
+        type: string
+      status:
+        type: string
+    type: object
+  dto.GenerateBody:
+    properties:
+      cases:
+        items:
+          $ref: '#/definitions/dto.Case'
+        type: array
+    type: object
+  dto.GenerateResult:
+    properties:
+      content:
+        type: string
+      created:
+        type: integer
+      refusal:
+        type: string
+      stop_reason:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: TestOps Copilot
+  version: 0.1.0
+paths:
+  /api/v1/generate:
+    post:
+      consumes:
+      - application/json
+      description: Generates a test case based on the user prompt. The request will
+        be processed by the LLM and returned in a unified response format.
+      parameters:
+      - description: Request body containing test cases
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GenerateBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with generated test case
+          schema:
+            $ref: '#/definitions/dto.GenerateResult'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/dto.ErrorResult'
+        "500":
+          description: Internal server error or LLM request failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResult'
+      summary: Generate test case using LLM
+      tags:
+      - Generate
+swagger: "2.0"

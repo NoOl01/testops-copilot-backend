@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"testops_copilot/internal/ai/ai_body"
 	"testops_copilot/internal/dto"
-	"testops_copilot/internal/service/ai_body"
 )
 
 func AnswerToGenerateResult(ans ai_body.CloudAnswer) dto.GenerateResult {

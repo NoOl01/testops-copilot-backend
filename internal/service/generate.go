@@ -8,21 +8,37 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"testops_copilot/internal/ai/ai_body"
+	"testops_copilot/internal/ai/prompts"
 	"testops_copilot/internal/config"
 	"testops_copilot/internal/consts"
 	"testops_copilot/internal/dto"
-	"testops_copilot/internal/service/ai_body"
 	"testops_copilot/internal/utils"
 	"testops_copilot/pkg/logger"
 )
 
 func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.GenerateResult, error) {
+	var systemPrompt string
+	switch testCase.TestType {
+	case dto.UiTest:
+		systemPrompt = prompts.UiTest
+	case dto.ApiTest:
+		systemPrompt = prompts.ApiTest
+	default:
+		logger.Log.Error(consts.GenerateService, "invalid test type")
+		return nil, consts.InvalidTestType
+	}
+
 	rawJson := ai_body.AiBody{
 		Model: config.Env.Model,
 		Messages: []ai_body.AiMessage{
 			{
 				Role:    "user",
 				Content: testCase.UserPrompt,
+			},
+			{
+				Role:    "system",
+				Content: systemPrompt,
 			},
 		},
 		Temperature: config.Env.Temperature,

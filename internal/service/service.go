@@ -23,8 +23,7 @@ func NewService() Service {
 				DialContext: (&net.Dialer{
 					Timeout: 3 * time.Second,
 				}).DialContext,
-				TLSHandshakeTimeout:   5 * time.Second,
-				ResponseHeaderTimeout: 30 * time.Second,
+				TLSHandshakeTimeout: 5 * time.Second,
 			},
 			Timeout: 120 * time.Second,
 		},
