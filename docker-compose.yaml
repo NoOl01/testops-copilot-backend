@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  testops_copilot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${SERVER_PORT}:8080"
+    env_file:
+      - .env
