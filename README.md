@@ -29,6 +29,6 @@ Deployment: Docker, env configuration
   DEBUG=true
   TEMPERATURE=0.5
   TOP_P=0.9
-  MAX_TOKENS=5000```
+  MAX_TOKENS=5000
 - go to the root directory (cmd/powershell)
 - run build: `docker-compose up --build`
