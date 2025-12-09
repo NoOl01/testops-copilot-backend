@@ -19,7 +19,7 @@ Deployment: Docker, env configuration
 
 ### Building
 
-- Get API key from [https://cloud.ru/docs/console_api/ug/topics/guides__static-api-keys](Cloud.ru)
+- Get API key from [Cloud.ru](https://cloud.ru/docs/console_api/ug/topics/guides__static-api-keys)
 - Clone repository `git clone https://github.com/NoOl01/testops-copilot-backend`
 - Create .env file in the root directory:
   ```LLM_TOKEN=your_api_key_here
