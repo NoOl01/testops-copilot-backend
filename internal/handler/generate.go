@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"net/http"
+	"sync"
 	"testops_copilot/internal/consts"
 	"testops_copilot/internal/dto"
 	"testops_copilot/pkg/logger"
@@ -41,22 +42,29 @@ func (h *handler) Generate(ctx *gin.Context) {
 
 	logger.Log.Debug(consts.GenerateHandler, "body is valid")
 
-	//wg := sync.WaitGroup{}
-	//
-	//wg.Add(len(body.Cases))
-	//for _, testCase := range body.Cases {
-	//	go
-	//}
+	wg := sync.WaitGroup{}
+	wg.Add(len(body.Cases))
 
-	var response *dto.GenerateResult
-	response, err := h.Service.Generate(body.Cases[0], timeoutCtx)
-	if err != nil {
-		ctx.JSON(500, dto.ErrorResult{
-			Status: "error",
-			Error:  err.Error(),
-		})
-		return
+	resultChan := make(chan dto.Result, len(body.Cases))
+
+	for i, testCase := range body.Cases {
+		go func(i int, testCase dto.Case) {
+			data, err, status := h.Service.Generate(testCase, timeoutCtx)
+			resultChan <- dto.Result{
+				Index:  i,
+				Status: status,
+				Err:    err,
+				Data:   data,
+			}
+		}(i, testCase)
 	}
 
-	ctx.JSON(http.StatusOK, *response)
+	var results []dto.Result
+
+	for i := 0; i < len(body.Cases); i++ {
+		r := <-resultChan
+		results = append(results, r)
+	}
+
+	ctx.JSON(http.StatusOK, results)
 }

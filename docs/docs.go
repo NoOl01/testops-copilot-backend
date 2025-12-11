@@ -72,17 +72,20 @@ const docTemplate = `{
                 "label": {
                     "type": "string"
                 },
+                "link": {
+                    "type": "string"
+                },
                 "manual": {
                     "type": "boolean"
+                },
+                "priority": {
+                    "type": "string"
                 },
                 "story": {
                     "type": "string"
                 },
-                "tag": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "tags": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
@@ -94,6 +97,9 @@ const docTemplate = `{
             "properties": {
                 "allure_metadata": {
                     "$ref": "#/definitions/dto.AllureMetadata"
+                },
+                "test_type": {
+                    "type": "string"
                 },
                 "user_prompt": {
                     "type": "string"

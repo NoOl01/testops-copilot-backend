@@ -11,3 +11,10 @@ type GenerateResult struct {
 	Refusal    *string `json:"refusal"`
 	StopReason string  `json:"stop_reason"`
 }
+
+type Result struct {
+	Index  int
+	Status int
+	Err    error
+	Data   *GenerateResult
+}

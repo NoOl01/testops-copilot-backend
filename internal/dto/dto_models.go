@@ -6,22 +6,22 @@ type GenerateBody struct {
 
 type Case struct {
 	UserPrompt     string         `json:"user_prompt"`
-	TestType       TestType       `json:"test_type"`
+	TestType       string         `json:"test_type"`
 	AllureMetadata AllureMetadata `json:"allure_metadata"`
 }
 
 type AllureMetadata struct {
-	Manual  bool     `json:"manual"`
-	Feature string   `json:"feature"`
-	Story   string   `json:"story"`
-	Label   string   `json:"label"`
-	Tag     []string `json:"tag"`
-	Title   string   `json:"title"`
+	Manual   bool   `json:"manual"`
+	Label    string `json:"label"`
+	Feature  string `json:"feature"`
+	Story    string `json:"story"`
+	Title    string `json:"title"`
+	Link     string `json:"link"`
+	Tags     string `json:"tags"`
+	Priority string `json:"priority"`
 }
 
-type TestType string
-
 const (
-	UiTest  TestType = "UiTest"
-	ApiTest TestType = "ApiTest"
+	UiTest  string = "UiTest"
+	ApiTest string = "ApiTest"
 )

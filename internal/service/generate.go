@@ -17,28 +17,22 @@ import (
 	"testops_copilot/pkg/logger"
 )
 
-func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.GenerateResult, error) {
-	var systemPrompt string
-	switch testCase.TestType {
-	case dto.UiTest:
-		systemPrompt = prompts.UiTest
-	case dto.ApiTest:
-		systemPrompt = prompts.ApiTest
-	default:
-		logger.Log.Error(consts.GenerateService, "invalid test type")
-		return nil, consts.InvalidTestType
+func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.GenerateResult, error, int) {
+	systemPrompt, err := prompts.BuildPrompt(testCase)
+	if err != nil {
+		return nil, err, 500
 	}
 
 	rawJson := ai_body.AiBody{
 		Model: config.Env.Model,
 		Messages: []ai_body.AiMessage{
 			{
-				Role:    "user",
-				Content: testCase.UserPrompt,
-			},
-			{
 				Role:    "system",
 				Content: systemPrompt,
+			},
+			{
+				Role:    "user",
+				Content: testCase.UserPrompt,
 			},
 		},
 		Temperature: config.Env.Temperature,
@@ -49,7 +43,7 @@ func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.Generate
 	jsonData, err := json.Marshal(rawJson)
 	if err != nil {
 		logger.Log.Error(consts.GenerateService, "error with generating json: "+err.Error())
-		return nil, fmt.Errorf("error with generating json: %w", err)
+		return nil, fmt.Errorf("error with generating json: %w", err), 500
 	}
 
 	jsonBody := bytes.NewBuffer(jsonData)
@@ -59,7 +53,7 @@ func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.Generate
 	req, err := http.NewRequestWithContext(ctx, "POST", config.Env.LLMUrl, jsonBody)
 	if err != nil {
 		logger.Log.Info(consts.GenerateService, "request creation error: "+err.Error())
-		return nil, fmt.Errorf("request creation error: %w", err)
+		return nil, fmt.Errorf("request creation error: %w", err), 500
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -71,14 +65,14 @@ func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.Generate
 	if err != nil {
 		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
 			logger.Log.Error(consts.GenerateService, "connection timeout")
-			return nil, consts.ConnectionTimeout
+			return nil, consts.ConnectionTimeout, 504
 		}
 		if errors.Is(ctx.Err(), context.Canceled) {
 			logger.Log.Error(consts.GenerateService, "request canceled")
-			return nil, consts.RequestCanceled
+			return nil, consts.RequestCanceled, 499
 		}
 		logger.Log.Info(consts.GenerateService, "request error: "+err.Error())
-		return nil, fmt.Errorf("request error: %w", err)
+		return nil, fmt.Errorf("request error: %w", err), 500
 	}
 
 	defer resp.Body.Close()
@@ -91,18 +85,18 @@ func (s service) Generate(testCase dto.Case, ctx context.Context) (*dto.Generate
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			logger.Log.Error(consts.GenerateService, "error with reading error: "+err.Error())
-			return nil, fmt.Errorf("error with reading error: %w", err)
+			return nil, fmt.Errorf("error with reading error: %w", err), 500
 		}
 		logger.Log.Error(consts.GenerateService, fmt.Sprintf("AI API Error (status: %d): %s", resp.StatusCode, string(body)))
-		return nil, fmt.Errorf("AI API Error (status: %d): %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("AI API Error (status: %d): %s", resp.StatusCode, string(body)), resp.StatusCode
 	}
 
 	if err := json.NewDecoder(resp.Body).Decode(&generateResp); err != nil {
 		logger.Log.Error(consts.GenerateService, "decode error: "+err.Error())
-		return nil, fmt.Errorf("decode error %w", err)
+		return nil, fmt.Errorf("decode error %w", err), 500
 	}
 
 	result = utils.AnswerToGenerateResult(generateResp)
 
-	return &result, nil
+	return &result, nil, 0
 }

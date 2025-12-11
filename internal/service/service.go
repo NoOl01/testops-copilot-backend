@@ -9,7 +9,7 @@ import (
 )
 
 type Service interface {
-	Generate(testCase dto.Case, ctx context.Context) (*dto.GenerateResult, error)
+	Generate(testCase dto.Case, ctx context.Context) (*dto.GenerateResult, error, int)
 }
 
 type service struct {

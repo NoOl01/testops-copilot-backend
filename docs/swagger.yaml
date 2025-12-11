@@ -6,14 +6,16 @@ definitions:
         type: string
       label:
         type: string
+      link:
+        type: string
       manual:
         type: boolean
+      priority:
+        type: string
       story:
         type: string
-      tag:
-        items:
-          type: string
-        type: array
+      tags:
+        type: string
       title:
         type: string
     type: object
@@ -21,6 +23,8 @@ definitions:
     properties:
       allure_metadata:
         $ref: '#/definitions/dto.AllureMetadata'
+      test_type:
+        type: string
       user_prompt:
         type: string
     type: object
