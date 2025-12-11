@@ -9,10 +9,11 @@
 Требования к генерации Python-кода:
 - pytest
 - allure
+- Playwright (не Selenium!)
 - AAA паттерн (Arrange, Act, Assert)
 - Использовать with allure.step()
+- Фикстура browser/page должна быть готовой и рабочей
 - Если Manual=true то добавлять @allure.manual и pytest.mark.manual
-- Тесты должны быть рабочими
 - Генерировать только Python-код
 
 Метаданные:
@@ -31,3 +32,10 @@
 Важно:
 - Прикреплять скриншоты через allure.attach.file как placeholder (скриншоты создаются при выполнении, а не при генерации).
 - При генерации ручных тестов использовать соответствующие декораторы.
+
+ВАЖНЫЕ ПРАВИЛА ГЕНЕРАЦИИ КОДА:
+
+1. ВСЕГДА используй фикстуру pytest: def test_name(page: Page)
+2. НИКОГДА не создавай браузер вручную (никакого sync_playwright() в тесте)
+4. Скриншоты: allure.attach(page.screenshot(), name="...", attachment_type=allure.attachment_type.PNG)
+5. Всегда возвращай ТОЛЬКО Python код, без пояснений.
