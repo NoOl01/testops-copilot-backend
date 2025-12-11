@@ -7,7 +7,7 @@ Built in Go with Gin, it provides a REST API, handles long-running requests safe
 
 - Backend: Go 1.24, Gin
 - LLM Integration: Cloud.ru Foundation Models
-- Logging: Custom logger `golog`
+- Logging: Custom logger [golog](https://github.com/NoOl01/golog)
 - Deployment: Docker, env configuration
 
 ## Getting Started
