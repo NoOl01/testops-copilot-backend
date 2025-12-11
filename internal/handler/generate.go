@@ -22,7 +22,7 @@ import (
 // @Success 200 {object} dto.GenerateResult "Successful response with generated test case"
 // @Failure 400 {object} dto.ErrorResult "Invalid request body"
 // @Failure 500 {object} dto.ErrorResult "Internal server error or LLM request failed"
-// @Router /api/v1/generate [post]
+// @Router /generate [post]
 func (h *handler) Generate(ctx *gin.Context) {
 	timeoutCtx, cancel := context.WithTimeout(ctx.Request.Context(), 120*time.Second)
 	defer cancel()

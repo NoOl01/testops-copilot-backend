@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/generate": {
+        "/generate": {
             "post": {
                 "description": "Generates a test case based on the user prompt. The request will be processed by the LLM and returned in a unified response format.",
                 "consumes": [
