@@ -21,12 +21,22 @@ WORKDIR /app/testops-copilot
 RUN npm install
 RUN npm run build
 
+RUN echo "=== Checking dist structure ===" && \
+    ls -la dist/ && \
+    echo "=== Checking dist/assets ===" && \
+    ls -la dist/assets/ || echo "No assets in dist"
+
 FROM alpine:latest
 
 WORKDIR /app
 
 COPY --from=backend-builder /server /app/server
 COPY --from=frontend-builder /app/testops-copilot/dist /app/static
+
+RUN echo "=== Final container structure ===" && \
+    ls -la /app/static/ && \
+    echo "=== Static assets ===" && \
+    ls -la /app/static/assets/ || echo "No assets folder"
 
 RUN chmod +x /app/server
 

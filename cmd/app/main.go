@@ -47,7 +47,8 @@ func main() {
 	h.Router(r)
 
 	r.NoRoute(func(c *gin.Context) {
-		if strings.HasPrefix(c.Request.URL.Path, "/assets/") {
+		if strings.HasPrefix(c.Request.URL.Path, "/assets/") ||
+			strings.HasPrefix(c.Request.URL.Path, "/api/") {
 			c.Status(http.StatusNotFound)
 			return
 		}
