@@ -40,9 +40,10 @@ func main() {
 	r := gin.Default()
 
 	r.Use(cors.Default())
-	h.Router(r)
 
-	r.Static("/static", "./static")
+	r.Static("/assets", "./static/assets")
+
+	h.Router(r)
 
 	r.NoRoute(func(c *gin.Context) {
 		c.File("./static/index.html")
