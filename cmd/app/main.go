@@ -39,10 +39,13 @@ func main() {
 
 	r := gin.Default()
 
-	r.Static("/", "./static")
-
 	r.Use(cors.Default())
 	h.Router(r)
+
+	r.Static("/", "./static")
+	r.NoRoute(func(c *gin.Context) {
+		c.File("./static/index.html") // SPA fallback
+	})
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", config.Env.ServerPort),
