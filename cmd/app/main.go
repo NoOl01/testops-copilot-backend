@@ -39,6 +39,8 @@ func main() {
 
 	r := gin.Default()
 
+	r.Static("/", "./static")
+
 	r.Use(cors.Default())
 	h.Router(r)
 
