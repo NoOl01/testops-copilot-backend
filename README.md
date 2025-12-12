@@ -19,7 +19,7 @@ Built in Go with Gin, it provides a REST API, handles long-running requests safe
 ### Building
 
 1. Get API key from [Cloud.ru](https://cloud.ru/docs/console_api/ug/topics/guides__static-api-keys)
-2. Clone repository `git clone https://github.com/NoOl01/testops-copilot-backend`
+2. Clone repository `git clone https://github.com/NoOl01/testops-copilot-backend.git`
 3. Create .env file in the root directory:
   ```
   LLM_TOKEN=your_api_key_here
