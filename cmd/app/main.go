@@ -42,6 +42,8 @@ func main() {
 	r.Use(cors.Default())
 	h.Router(r)
 
+	r.Static("/static", "./static")
+
 	r.NoRoute(func(c *gin.Context) {
 		c.File("./static/index.html")
 	})
