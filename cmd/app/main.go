@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"testops_copilot/internal/config"
 	"testops_copilot/internal/consts"
@@ -46,6 +47,10 @@ func main() {
 	h.Router(r)
 
 	r.NoRoute(func(c *gin.Context) {
+		if strings.HasPrefix(c.Request.URL.Path, "/assets/") {
+			c.Status(http.StatusNotFound)
+			return
+		}
 		c.File("./static/index.html")
 	})
 
