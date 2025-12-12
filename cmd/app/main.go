@@ -42,9 +42,8 @@ func main() {
 	r.Use(cors.Default())
 	h.Router(r)
 
-	r.Static("/", "./static")
 	r.NoRoute(func(c *gin.Context) {
-		c.File("./static/index.html") // SPA fallback
+		c.File("./static/index.html")
 	})
 
 	server := &http.Server{
